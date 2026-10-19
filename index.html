@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AFTERFLASH — a disposable camera for the internet. One roll. Twelve chances.">
+  <meta name="description" content="AFTERFLASH — little moments, on film.">
   <title>AFTERFLASH® — Disposable Camera for the Internet</title>
   <style>
     :root {
@@ -295,6 +295,29 @@
       font-size: 12px;
       line-height: 1.55;
     }
+
+    .film-selector { margin-top: 22px; }
+    .film-selector-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+    .film-current { color:var(--text); font-size:9px; font-weight:800; letter-spacing:.14em; }
+    .film-options { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
+    .film-option { min-width:0; padding:8px; border:1px solid var(--border); border-radius:8px; color:var(--muted); background:#131510; text-align:left; transition:border-color .15s, background .15s; }
+    .film-option:hover, .film-option.active { border-color:var(--lime); background:#20231a; color:var(--text); }
+    .film-swatch { display:block; height:42px; border-radius:4px; margin-bottom:9px; border:1px solid rgba(255,255,255,.09); }
+    .swatch-warm { background:linear-gradient(135deg,#f3d7a0,#b66e43 48%,#334a3e); }
+    .swatch-soft { background:linear-gradient(135deg,#e7d6bd,#b8a8a1 48%,#7d9a94); }
+    .swatch-toy { background:radial-gradient(ellipse at center,#e6b77d 0%,#8d9b69 40%,#29362c 100%); }
+    .swatch-flash { background:linear-gradient(135deg,#fff1d8,#e9a6a0 48%,#36485b); }
+    .swatch-mono { background:linear-gradient(135deg,#f4f1e9,#8e918b 48%,#242622); }
+    .film-name { display:block; font-size:10px; font-weight:800; line-height:1.3; }
+    .film-detail { display:block; margin-top:4px; font-size:7px; letter-spacing:.08em; line-height:1.4; }
+    .viewfinder::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none; opacity:0; transition:opacity .2s; }
+    .viewfinder[data-film="toycam"]::after { opacity:1; background:radial-gradient(ellipse at center,transparent 38%,rgba(24,22,15,.12) 62%,rgba(15,17,12,.72) 100%),linear-gradient(115deg,rgba(255,175,70,.08),transparent 45%,rgba(40,75,54,.14)); }
+    .viewfinder[data-film="warm35"]::after { opacity:1; background:linear-gradient(0deg,rgba(139,83,40,.08),rgba(255,214,148,.06)); }
+    .viewfinder[data-film="softcolor"]::after { opacity:1; background:rgba(227,202,180,.12); }
+    .viewfinder[data-film="flash"]::after { opacity:1; background:linear-gradient(0deg,rgba(16,24,40,.04),rgba(255,239,218,.07)); }
+    .viewfinder[data-film="mono"]::after { opacity:1; background:rgba(180,184,174,.08); }
+    .viewfinder .vf-inset { z-index:3; }
+    @media (max-width:700px) { .film-options { grid-template-columns:repeat(3,minmax(0,1fr)); } .film-swatch { height:34px; } }
 
     .camera-controls {
       display: grid;
@@ -622,17 +645,17 @@
       <div class="brand" aria-label="AFTERFLASH">
         <span class="brand-after">AFTER</span><span class="brand-flash">FLASH</span><sup>®</sup>
       </div>
-      <div class="tagline">a disposable camera for the internet</div>
+      <div class="tagline">your own little film camera</div>
     </header>
 
     <main>
       <section class="intro" aria-labelledby="intro-title">
-        <div class="eyebrow">ONE ROLL. TWELVE CHANCES.</div>
+        <div class="eyebrow">A LITTLE CAMERA FOR KEEPING THINGS</div>
         <div class="intro-grid">
-          <h1 id="intro-title">Make it<br><span class="serif">happen.</span></h1>
+          <h1 id="intro-title">Stay for<br><span class="serif">the light.</span></h1>
           <p class="intro-copy">
-            No filters. No retakes. Just the little moments you’ll be glad you kept.
-            Develop your roll when you’re ready.
+            A little grain. A little blur. The kind of photos that feel like being there again.
+            Pick your film, take your time, and develop your roll when you’re ready.
           </p>
         </div>
       </section>
@@ -662,6 +685,20 @@
                 <p>Enable your camera to load the viewfinder.</p>
               </div>
             </div>
+
+            <section class="film-selector" aria-label="Choose a film look">
+              <div class="film-selector-head">
+                <span class="micro-label">CHOOSE YOUR FILM</span>
+                <span class="film-current" id="filmCurrent">WARM 35</span>
+              </div>
+              <div class="film-options" role="group" aria-label="Film stocks">
+                <button type="button" class="film-option active" data-film="warm35" aria-pressed="true"><span class="film-swatch swatch-warm"></span><span class="film-name">Warm 35</span><span class="film-detail">SUNLIT / SOFT</span></button>
+                <button type="button" class="film-option" data-film="softcolor" aria-pressed="false"><span class="film-swatch swatch-soft"></span><span class="film-name">Soft Color</span><span class="film-detail">FADED / DREAMY</span></button>
+                <button type="button" class="film-option" data-film="toycam" aria-pressed="false"><span class="film-swatch swatch-toy"></span><span class="film-name">Toycam</span><span class="film-detail">LO-FI / VIGNETTE</span></button>
+                <button type="button" class="film-option" data-film="flash" aria-pressed="false"><span class="film-swatch swatch-flash"></span><span class="film-name">Direct Flash</span><span class="film-detail">BOLD / CRISP</span></button>
+                <button type="button" class="film-option" data-film="mono" aria-pressed="false"><span class="film-swatch swatch-mono"></span><span class="film-name">Monochrome</span><span class="film-detail">GRAIN / SILVER</span></button>
+              </div>
+            </section>
 
             <div class="camera-controls">
               <button class="btn btn-outline" id="enableCamera" type="button">ENABLE CAMERA</button>
@@ -720,7 +757,7 @@
 
     <footer>
       <div>AFTERFLASH CAMERA CLUB</div>
-      <div class="footer-right">KEEP WHAT HAPPENS.</div>
+      <div class="footer-right">A MOMENT, IN A FRAME.</div>
     </footer>
   </div>
 
@@ -748,6 +785,15 @@
       let stream = null;
       let photos = [];
       let developed = false;
+      let selectedFilm = "warm35";
+      const filmNames = { warm35: "WARM 35", softcolor: "SOFT COLOR", toycam: "TOYCAM", flash: "DIRECT FLASH", mono: "MONOCHROME" };
+      const filmLooks = {
+        warm35: { saturation: 1.08, contrast: 1.06, lift: 4, warmth: 5, grain: 0.07, vignette: 0.10 },
+        softcolor: { saturation: 0.78, contrast: 0.88, lift: 13, warmth: 3, grain: 0.045, vignette: 0.04 },
+        toycam: { saturation: 1.28, contrast: 1.22, lift: 1, warmth: 1, grain: 0.12, vignette: 0.72 },
+        flash: { saturation: 1.12, contrast: 1.24, lift: 0, warmth: 2, grain: 0.035, vignette: 0.02 },
+        mono: { saturation: 0, contrast: 1.12, lift: 6, warmth: 0, grain: 0.13, vignette: 0.12 }
+      };
 
       function setStatus(message, isError = false) {
         statusMessage.textContent = message;
@@ -831,50 +877,90 @@
         }
       }
 
-      function applyFilmTreatment(ctx, width, height) {
+      function updateFilmLook() {
+        viewfinder.dataset.film = selectedFilm;
+        document.getElementById("filmCurrent").textContent = filmNames[selectedFilm];
+        document.querySelectorAll(".film-option").forEach(button => {
+          const active = button.dataset.film === selectedFilm;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        const liveFilters = {
+          warm35: "sepia(.12) saturate(1.08) contrast(1.04)",
+          softcolor: "sepia(.12) saturate(.78) brightness(1.04) contrast(.92)",
+          toycam: "sepia(.10) saturate(1.28) contrast(1.12)",
+          flash: "saturate(1.12) contrast(1.18) brightness(1.03)",
+          mono: "grayscale(1) contrast(1.08)"
+        };
+        video.style.filter = liveFilters[selectedFilm];
+      }
+
+      function applyFilmTreatment(ctx, width, height, filmKey) {
+        const look = filmLooks[filmKey] || filmLooks.warm35;
         const imageData = ctx.getImageData(0, 0, width, height);
         const data = imageData.data;
+        const cx = width / 2, cy = height / 2;
+        const maxDist = Math.sqrt(cx * cx + cy * cy);
 
         for (let i = 0; i < data.length; i += 4) {
-          let r = data[i];
-          let g = data[i + 1];
-          let b = data[i + 2];
-
-          // Gentle warm film bias, restrained contrast and lifted blacks.
+          let r = data[i], g = data[i + 1], b = data[i + 2];
           const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-          const contrast = 1.035;
-          const lift = 3.5;
+          const contrast = look.contrast;
+          r = (r - 128) * contrast + 128 + look.lift + look.warmth;
+          g = (g - 128) * contrast + 128 + look.lift + look.warmth * 0.22;
+          b = (b - 128) * contrast + 128 + look.lift - look.warmth * 0.72;
+          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+          r = gray + (r - gray) * look.saturation;
+          g = gray + (g - gray) * look.saturation;
+          b = gray + (b - gray) * look.saturation;
 
-          r = (r - 128) * contrast + 128 + lift + 2.0;
-          g = (g - 128) * contrast + 128 + lift + 0.7;
-          b = (b - 128) * contrast + 128 + lift - 3.0;
-
-          // Very subtle warmth in highlights.
-          const highlight = Math.max(0, (luma - 80) / 175);
-          r += 2.0 * highlight;
-          b -= 1.2 * highlight;
-
+          // Soft color film lifts the shadows; toy camera adds edge falloff.
+          if (filmKey === "softcolor") { r += 2; g += 1; b -= 1; }
+          if (filmKey === "toycam") { r += 2; g += 1; b -= 3; }
+          if (filmKey === "flash") {
+            const highlight = Math.max(0, (luma - 95) / 160);
+            r += 5 * highlight; g += 3 * highlight; b += highlight;
+          }
+          if (look.vignette > 0) {
+            const pixel = i / 4, x = pixel % width, y = Math.floor(pixel / width);
+            const dist = Math.sqrt((x-cx)*(x-cx) + (y-cy)*(y-cy)) / maxDist;
+            const falloff = Math.max(0, (dist - 0.28) / 0.72);
+            const shade = 1 - look.vignette * falloff * falloff;
+            r *= shade; g *= shade; b *= shade;
+          }
           data[i] = Math.max(0, Math.min(255, r));
           data[i + 1] = Math.max(0, Math.min(255, g));
           data[i + 2] = Math.max(0, Math.min(255, b));
         }
-
         ctx.putImageData(imageData, 0, 0);
 
-        // Fine grain, kept deliberately subtle.
-        const grain = Math.max(1, Math.floor(width * 0.002));
-        const count = Math.floor(width * height / 850);
-
+        // Film grain, sampled across the image to keep it tactile rather than noisy.
+        const grain = Math.max(1, Math.floor(width * 0.0018));
+        const count = Math.floor(width * height / (look.grain > 0.1 ? 260 : 650));
         ctx.save();
-        ctx.globalAlpha = 0.055;
+        ctx.globalAlpha = look.grain;
         for (let i = 0; i < count; i++) {
-          const x = Math.random() * width;
-          const y = Math.random() * height;
+          const x = Math.random() * width, y = Math.random() * height;
           const v = Math.random() > 0.5 ? 255 : 0;
           ctx.fillStyle = `rgb(${v},${v},${v})`;
           ctx.fillRect(x, y, grain, grain);
         }
         ctx.restore();
+
+        if (filmKey === "toycam") {
+          const vignette = ctx.createRadialGradient(width/2, height/2, width*0.18, width/2, height/2, width*0.76);
+          vignette.addColorStop(0, "rgba(16,20,13,0)");
+          vignette.addColorStop(0.68, "rgba(16,20,13,0.04)");
+          vignette.addColorStop(1, "rgba(10,13,9,0.35)");
+          ctx.fillStyle = vignette;
+          ctx.fillRect(0, 0, width, height);
+          // Occasional subtle light leak along one edge.
+          const leak = ctx.createLinearGradient(0, 0, width * 0.42, height * 0.2);
+          leak.addColorStop(0, "rgba(255,115,50,0.10)");
+          leak.addColorStop(1, "rgba(255,115,50,0)");
+          ctx.fillStyle = leak;
+          ctx.fillRect(0, 0, width, height);
+        }
       }
 
       function getCaptureDimensions() {
@@ -921,12 +1007,13 @@
         ctx.drawImage(video, sx, sy, sw, sh, 0, 0, width, height);
         ctx.restore();
 
-        applyFilmTreatment(ctx, width, height);
+        const capturedFilm = selectedFilm;
+        applyFilmTreatment(ctx, width, height, capturedFilm);
 
         const url = canvas.toDataURL("image/jpeg", 0.92);
         photos.push({
           url,
-          name: `afterflash-${String(photos.length + 1).padStart(2, "0")}.jpg`
+          name: `afterflash-${capturedFilm}-${String(photos.length + 1).padStart(2, "0")}.jpg`
         });
 
         flash.classList.remove("active");
@@ -1067,6 +1154,14 @@
         }
         video.srcObject = null;
       }
+
+      document.querySelectorAll(".film-option").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedFilm = button.dataset.film;
+          updateFilmLook();
+          setStatus(`${filmNames[selectedFilm]} loaded. Ready for the next frame.`);
+        });
+      });
 
       enableCameraButton.addEventListener("click", enableCamera);
       takePhotoButton.addEventListener("click", captureFrame);
